@@ -1,5 +1,12 @@
 import React, { Component } from "react";
-import { View, Text, TextInput, StyleSheet, SafeAreaView } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  SafeAreaView,
+  TouchableOpacity
+} from "react-native";
 
 class Calc extends Component {
   constructor() {
@@ -7,7 +14,7 @@ class Calc extends Component {
     this.state = {
       inputText: ""
     };
-    this.validKry = [
+    this.validKeys = [
       "0",
       "1",
       "2",
@@ -28,7 +35,7 @@ class Calc extends Component {
 
   handleInput(text) {
     this.setState({
-      inputText: text
+      inputText: this.state.inputText + text
     });
   }
 
@@ -40,6 +47,29 @@ class Calc extends Component {
           value={this.state.inputText}
           style={styles.input}
         />
+        <View style={{ flex: 1, flexDirection: "column" }}>
+          {this.validKeys.map((key, i) => {
+            if (i % 2 !== 0) {
+              return;
+            }
+            return (
+              <View style={styles.row}>
+                <TouchableOpacity
+                  onPress={this.handleInput.bind(this, this.validKeys[i])}
+                  style={styles.button}
+                >
+                  <Text style={styles.btnText}> {this.validKeys[i]}</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={this.handleInput.bind(this, this.validKeys[i + 1])}
+                  style={styles.button}
+                >
+                  <Text style={styles.btnText}> {this.validKeys[i + 1]}</Text>
+                </TouchableOpacity>
+              </View>
+            );
+          })}
+        </View>
       </View>
     );
   }
@@ -53,6 +83,20 @@ const styles = StyleSheet.create({
     color: "white",
     textAlign: "right",
     fontSize: 48
+  },
+  button: {
+    flex: 1,
+    borderWidth: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "lightgreen"
+  },
+  row: {
+    flex: 1,
+    flexDirection: "row"
+  },
+  btnText: {
+    fontSize: 36
   }
 });
 export default Calc;
