@@ -12,7 +12,9 @@ class Calc extends Component {
   constructor() {
     super();
     this.state = {
-      inputText: ""
+      inputText: "",
+      pendingOperation: null,
+      firstOperand: ""
     };
     this.validKeys = [
       "0",
@@ -35,9 +37,73 @@ class Calc extends Component {
 
   handleInput(text) {
     this.setState({
-      inputText: this.state.inputText + text
+      inputText: text
     });
   }
+
+  handleButtonInput(text) {
+    if (["+", "-", "/", "*"].indexOf(text) > -1) {
+      this.setState({
+        pendingOperation: text,
+        firstOperand: this.state.inputText,
+        inputText: ""
+      });
+      console.log(JSON.stringify(this.state));
+      return;
+    } else if (text === "=") {
+      this.calculate();
+      return;
+    }
+    this.setState({
+      inputText: this.state.inputText + text
+    });
+    console.log(JSON.stringify(this.state));
+  }
+  calculate() {
+    let result = null;
+    switch (this.state.pendingOperation) {
+      case "+":
+        result = Number(this.state.firstOperand) + Number(this.state.inputText);
+        result = result.toString();
+        this.setState({
+          inputText: result,
+          pendingOperation: null,
+          firstOperand: ""
+        });
+        return;
+      case "-":
+        result = Number(this.state.firstOperand) - Number(this.state.inputText);
+        result = result.toString();
+        this.setState({
+          inputText: result,
+          pendingOperation: null,
+          firstOperand: ""
+        });
+        return;
+      case "/":
+        result = Number(this.state.firstOperand) / Number(this.state.inputText);
+        result = result.toString();
+        this.setState({
+          inputText: result,
+          pendingOperation: null,
+          firstOperand: ""
+        });
+        return;
+      case "*":
+        result = Number(this.state.firstOperand) * Number(this.state.inputText);
+        result = result.toString();
+        this.setState({
+          inputText: result,
+          pendingOperation: null,
+          firstOperand: ""
+        });
+        return;
+      default:
+        return;
+    }
+    
+    }
+  
 
   render() {
     return (
@@ -55,13 +121,16 @@ class Calc extends Component {
             return (
               <View style={styles.row}>
                 <TouchableOpacity
-                  onPress={this.handleInput.bind(this, this.validKeys[i])}
+                  onPress={this.handleButtonInput.bind(this, this.validKeys[i])}
                   style={styles.button}
                 >
                   <Text style={styles.btnText}> {this.validKeys[i]}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  onPress={this.handleInput.bind(this, this.validKeys[i + 1])}
+                  onPress={this.handleButtonInput.bind(
+                    this,
+                    this.validKeys[i + 1]
+                  )}
                   style={styles.button}
                 >
                   <Text style={styles.btnText}> {this.validKeys[i + 1]}</Text>
