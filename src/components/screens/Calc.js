@@ -142,7 +142,7 @@ class Calc extends Component {
 
 const styles = StyleSheet.create({
   input: {
-    backgroundColor: "rgb(41,41,41)",
+    backgroundColor: "rgb(42,41,41)",
     height: 100,
     width: 100 + "%",
     color: "white",
